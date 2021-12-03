@@ -25,6 +25,7 @@ public class RedBlackTree {
             this.key = data;
             leftChild = null;
             rightChild = null;
+            isRed = true;
         }
 
         /**
@@ -52,14 +53,7 @@ public class RedBlackTree {
          */
         @Override
         public String toString() {
-            return "Node{" +
-                    "key='" + key + '\'' +
-                    ", parent=" + parent +
-                    ", leftChild=" + leftChild +
-                    ", rightChild=" + rightChild +
-                    ", isRed=" + isRed +
-                    ", color=" + color +
-                    '}';
+            return key + " is Red: " + isRed;
         }
     }
 
@@ -124,6 +118,7 @@ public class RedBlackTree {
         if (root == null) {
             root = nodeToAdd;
             root.parent = new Node("");
+            root.parent.isRed = false;
         }
         else {
             RedBlackTree.Node currentNode = root;
@@ -214,35 +209,27 @@ public class RedBlackTree {
      */
     public void rotateLeft(Node n){
         // TODO: check for correctness
-        Node parent = n.parent;
-        //     5  (n) t
-        //       \
-        //         6 (rightChild)
-        //        /
-        //       7  (rLeftChild)
-        //right child node of the head
-        Node rightChild = n.rightChild;
-        //left node of the right child
-        Node rLeftChild = rightChild.leftChild;
-
-        //         6 (rightChild)
-        //        /
-        //       5  (n)
-        //set the right child's left node to the head (n)
-        rightChild.leftChild = n;
-
-        //     6  (rightChild)
-        //    / \
-        //  5     7  (rLeftChild)
-        //set the head's right child to the left child
-        rightChild.rightChild = rLeftChild;
-
-        //set the head to the right child
-        rightChild.parent = parent;
-
-        //if the rLeftChild is not null, set the parent to n
-        if(rLeftChild != null) {
-            rLeftChild.parent = rightChild;
+        Node originalParentOfN = n.parent;
+        Node y = n.rightChild;
+        Node originalLeftChildOfY = null;
+        if (y != null) {
+            originalLeftChildOfY = y.leftChild;
+        }
+        boolean nWasLeftChild = isLeftChild(originalParentOfN, n);
+        if (originalLeftChildOfY != null) {
+            originalLeftChildOfY.parent = n;
+        }
+        n.rightChild = originalLeftChildOfY;
+        n.parent = y;
+        if (y != null) {
+            y.leftChild = n;
+            y.parent = originalParentOfN;
+        }
+        if (nWasLeftChild) {
+            originalParentOfN.leftChild = y;
+        }
+        else {
+            originalParentOfN.rightChild = y;
         }
     }
 
@@ -252,6 +239,26 @@ public class RedBlackTree {
      */
     public void rotateRight(Node n){
         // TODO: write method definition
+        Node originalParentOfN = n.parent;
+        Node x = n.leftChild;
+        Node originalRightChildOfX = null;
+        if (x != null) {
+            originalRightChildOfX = x.rightChild;
+        }
+        boolean nWasLeftChild = isLeftChild(originalParentOfN, n);
+        if (originalRightChildOfX != null) {
+            originalRightChildOfX.parent = n;
+        }
+        n.leftChild = originalRightChildOfX;
+        n.parent = x;
+        x.rightChild = n;
+        x.parent = originalParentOfN;
+        if (nWasLeftChild) {
+            originalParentOfN.leftChild = x;
+        }
+        else {
+            originalParentOfN.rightChild = x;
+        }
     }
 
     /**
@@ -273,13 +280,13 @@ public class RedBlackTree {
             if (auntNode == null || !auntNode.isRed) {
                 //A) grandparent –parent(is left child)— current (is right child) case.
                 //Solution: rotate the parent left and then continue recursively fixing the tree starting with the original parent.
-                if(isLeftChild(grandParentNode, current.parent)) {
+                if(isLeftChild(grandParentNode, current.parent) && !isLeftChild(current.parent, current)) {
                     rotateLeft(current.parent);
                     fixTree(current.parent);
                 }
                 //B) grandparent –parent (is right child)— current (is left child) case.
                 //Solution: rotate the parent right and then continue recursively fixing the tree starting with the original parent.
-                else if(!isLeftChild(grandParentNode, current.parent)) {
+                else if(!isLeftChild(grandParentNode, current.parent) && isLeftChild(current.parent, current)) {
                     rotateRight(current.parent);
                     fixTree(current.parent);
                 }
