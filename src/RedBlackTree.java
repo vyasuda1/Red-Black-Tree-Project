@@ -96,27 +96,15 @@ public class RedBlackTree {
      * @param node the node that is at the root of the subtree to print
      */
     public void printTree(Node node){
-        if (node == null){
+        System.out.print(node.key);
+        if (node.isLeaf()){
             return;
         }
-        System.out.print(node.key);
         printTree(node.leftChild);
         printTree(node.rightChild);
     }
 
-    public String getTree(Node node) {
-        String tree = "{";
-        if (node == null){
-            return tree + "}";
-        }
-        tree += node.key;
-        tree += getTree(node.leftChild);
-        tree += getTree(node.rightChild);
-        return tree + "}";
-    }
-
     // place a new node in the RB tree with data the parameter and color it red.
-
     /**
      *
      * @param data
@@ -158,7 +146,7 @@ public class RedBlackTree {
      * @param k the string to be searched for
      * @return the node with the string
      */
-    public RedBlackTree.Node lookup(String k){
+    public Node lookup(String k){
         RedBlackTree.Node currentNode = root;
         while (!(currentNode == null || currentNode.key.equals(k))) {
             if (currentNode.key.compareTo(k) < 0) {
@@ -176,7 +164,7 @@ public class RedBlackTree {
      * @param n the node whose sibling should be retrieved
      * @return the sibling of the node
      */
-    public RedBlackTree.Node getSibling(RedBlackTree.Node n){
+    public Node getSibling(Node n){
         if (isLeftChild(n.parent, n)) {
             return n.parent.rightChild;
         }
@@ -190,7 +178,7 @@ public class RedBlackTree {
      * @param n the node whose aunt should be retrieved.
      * @return the aunt of the node
      */
-    public RedBlackTree.Node getAunt(RedBlackTree.Node n){
+    public Node getAunt(Node n){
         return getSibling(n.parent);
     }
 
@@ -199,7 +187,7 @@ public class RedBlackTree {
      * @param n the node whose grandparent should be retrieved
      * @return the grandparent of the node
      */
-    public RedBlackTree.Node getGrandparent(RedBlackTree.Node n){
+    public Node getGrandparent(Node n){
         return n.parent.parent;
     }
 
@@ -207,7 +195,7 @@ public class RedBlackTree {
      *
      * @param n
      */
-    public void rotateLeft(RedBlackTree.Node n){
+    public void rotateLeft(Node n){
         //
     }
 
@@ -215,7 +203,7 @@ public class RedBlackTree {
      *
      * @param n
      */
-    public void rotateRight(RedBlackTree.Node n){
+    public void rotateRight(Node n){
         //
     }
 
@@ -223,7 +211,7 @@ public class RedBlackTree {
      *
      * @param current
      */
-    public void fixTree(RedBlackTree.Node current) {
+    public void fixTree(Node current) {
         //
     }
 
@@ -232,7 +220,7 @@ public class RedBlackTree {
      * @param n the node in question.
      * @return true if the node does not contain a key, false otherwise.
      */
-    public boolean isEmpty(RedBlackTree.Node n){
+    public boolean isEmpty(Node n){
         if (n.key == null){
             return true;
         }
@@ -245,7 +233,7 @@ public class RedBlackTree {
      * @param child the child node
      * @return true if the child is the left child, false if the child is the right child
      */
-    public boolean isLeftChild(RedBlackTree.Node parent, RedBlackTree.Node child) {
+    public boolean isLeftChild(Node parent, Node child) {
         if (child.compareTo(parent) < 0 ) {//child is less than parent
             return true;
         }
@@ -265,20 +253,13 @@ public class RedBlackTree {
      * @param n the node at the root of the subtree
      * @param v the visitor of the subtree
      */
-    private static void preOrderVisit(RedBlackTree.Node n, Visitor v) {
+    private static void preOrderVisit(Node n, Visitor v) {
         if (n == null) {
             return;
         }
         v.visit(n);
         preOrderVisit(n.leftChild, v);
         preOrderVisit(n.rightChild, v);
-    }
-
-    @Override
-    public String toString() {
-        return "RedBlackTree{" +
-                getTree(root) +
-                '}';
     }
 }
 
