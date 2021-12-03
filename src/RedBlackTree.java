@@ -269,6 +269,7 @@ public class RedBlackTree {
         else if(current.isRed && current.parent.isRed) {
             // If the aunt node is empty or black, then there are four sub cases that you have to process.
             Node auntNode = getAunt(current);
+            Node grandParentNode = getGrandparent(current);
             if (auntNode == null || !auntNode.isRed) {
                 //A) grandparent –parent(is left child)— current (is right child) case.
                 //Solution: rotate the parent left and then continue recursively fixing the tree starting with the original parent.
@@ -291,7 +292,6 @@ public class RedBlackTree {
                 auntNode.color = 1;
                 auntNode.isRed = false;
                 // make the grandparent red
-                Node grandParentNode = getGrandparent(current);
                 grandParentNode.color = 0;
                 grandParentNode.isRed = true;
                 // and continue recursively fix up the tree starting with the grandparent.
