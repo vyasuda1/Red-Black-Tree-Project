@@ -43,10 +43,7 @@ public class RedBlackTree {
         public boolean isLeaf(){
             if (this.equals(root) && this.leftChild == null && this.rightChild == null) return true;
             if (this.equals(root)) return false;
-            if (this.leftChild == null && this.rightChild == null){
-                return true;
-            }
-            return false;
+            return this.leftChild == null && this.rightChild == null;
         }
 
         @Override
@@ -70,10 +67,7 @@ public class RedBlackTree {
     public boolean isLeaf(Node n){
         if (n.equals(root) && n.leftChild == null && n.rightChild == null) return true;
         if (n.equals(root)) return false;
-        if (n.leftChild == null && n.rightChild == null){
-            return true;
-        }
-        return false;
+        return n.leftChild == null && n.rightChild == null;
     }
 
     /**
@@ -116,10 +110,9 @@ public class RedBlackTree {
         printTree(node.rightChild);
     }
 
-    // place a new node in the RB tree with data the parameter and color it red.
     /**
-     *
-     * @param data
+     * Places a new node in the RB tree with data the parameter and color it red.
+     * @param data the data in the node to add to the tree
      */
     public void addNode(String data) {  	//this < that  <0.  this > that  >0
         RedBlackTree.Node nodeToAdd = new RedBlackTree.Node(data);
@@ -208,8 +201,8 @@ public class RedBlackTree {
     }
 
     /**
-     *
-     * @param n
+     * Rotates a subtree to the left.
+     * @param n the node whose subtree will be rotated to the left
      */
     public void rotateLeft(Node n){
         Node parent = n.parent;
@@ -245,16 +238,16 @@ public class RedBlackTree {
     }
 
     /**
-     *
-     * @param n
+     * Rotates a subtree to the right
+     * @param n the node whose subtree will be rotated to the right
      */
     public void rotateRight(Node n){
         //
     }
 
     /**
-     *
-     * @param current
+     * Recursively traverses the tree to make it a Red Black tree.
+     * @param current the node to start traversing at
      */
     public void fixTree(Node current) {
         //
@@ -266,10 +259,7 @@ public class RedBlackTree {
      * @return true if the node does not contain a key, false otherwise.
      */
     public boolean isEmpty(Node n){
-        if (n.key == null){
-            return true;
-        }
-        return false;
+        return n.key == null;
     }
 
     /**
@@ -279,10 +269,8 @@ public class RedBlackTree {
      * @return true if the child is the left child, false if the child is the right child
      */
     public boolean isLeftChild(Node parent, Node child) {
-        if (child.compareTo(parent) < 0 ) {//child is less than parent
-            return true;
-        }
-        return false;
+        //child is less than parent
+        return child.compareTo(parent) < 0;
     }
 
     /**
