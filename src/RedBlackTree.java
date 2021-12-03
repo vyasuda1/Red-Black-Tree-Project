@@ -48,6 +48,18 @@ public class RedBlackTree {
             }
             return false;
         }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "key='" + key + '\'' +
+                    ", parent=" + parent +
+                    ", leftChild=" + leftChild +
+                    ", rightChild=" + rightChild +
+                    ", isRed=" + isRed +
+                    ", color=" + color +
+                    '}';
+        }
     }
 
     /**
@@ -113,6 +125,7 @@ public class RedBlackTree {
         RedBlackTree.Node nodeToAdd = new RedBlackTree.Node(data);
         if (root == null) {
             root = nodeToAdd;
+            root.parent = new Node("");
         }
         else {
             RedBlackTree.Node currentNode = root;
@@ -120,17 +133,20 @@ public class RedBlackTree {
                 if (currentNode.compareTo(nodeToAdd) < 0) {
                     if (currentNode.rightChild == null) {
                         currentNode.rightChild = nodeToAdd;
+                        nodeToAdd.parent = currentNode;
                     }
                     currentNode = currentNode.rightChild;
                 }
                 else if (currentNode.compareTo(nodeToAdd) > 0) {
                     if (currentNode.leftChild == null) {
                         currentNode.leftChild = nodeToAdd;
+                        nodeToAdd.parent = currentNode;
                     }
                     currentNode = currentNode.leftChild;
                 }
             }
         }
+        fixTree(nodeToAdd);
     }
 
     /**
