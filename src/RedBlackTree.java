@@ -260,6 +260,30 @@ public class RedBlackTree {
      */
     public void fixTree(Node current) {
         // TODO: write method definition
+        //current is root node, make black and quit
+        if(current.compareTo(root) == 0) {
+            current.color = 1;
+            current.isRed = false;
+        }
+        //if the current node is red and parent node is red, unbalanced tree
+        else if(current.isRed && current.parent.isRed) {
+            // If the aunt node is empty or black, then there are four sub cases that you have to process.
+            Node auntNode = getAunt(current);
+            if(auntNode == null || !auntNode.isRed) {
+                //A) grandparent –parent(is left child)— current (is right child) case.
+                //Solution: rotate the parent left and then continue recursively fixing the tree starting with the original parent.
+
+                //B) grandparent –parent (is right child)— current (is left child) case. \
+                //Solution: rotate the parent right and then continue recursively fixing the tree starting with the original parent.
+
+                //C) grandparent –parent (is left child)— current (is left child) case.
+                //Solution: make the parent black, make the grandparent red, rotate the grandparent to the right and quit, tree is balanced.
+
+                //D) grandparent –parent (is right child)— current (is right child) case.
+                //Solution: make the parent black, make the grandparent red, rotate the grandparent to the left, quit tree is balanced.
+            }
+        }
+
     }
 
     /**
