@@ -197,7 +197,7 @@ public class RedBlackTree {
      */
     public void rotateLeft(Node n){
         Node parent = n.parent;
-        //     5  (n)
+        //     5  (n) t
         //       \
         //         6 (rightChild)
         //        /
