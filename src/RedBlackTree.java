@@ -273,9 +273,16 @@ public class RedBlackTree {
             if (auntNode == null || !auntNode.isRed) {
                 //A) grandparent –parent(is left child)— current (is right child) case.
                 //Solution: rotate the parent left and then continue recursively fixing the tree starting with the original parent.
-
-                //B) grandparent –parent (is right child)— current (is left child) case. \
+                if(isLeftChild(grandParentNode, current.parent)) {
+                    rotateLeft(current.parent);
+                    fixTree(current.parent);
+                }
+                //B) grandparent –parent (is right child)— current (is left child) case.
                 //Solution: rotate the parent right and then continue recursively fixing the tree starting with the original parent.
+                if(!isLeftChild(grandParentNode, current.parent)) {
+                    rotateRight(current.parent);
+                    fixTree(current.parent);
+                }
 
                 //C) grandparent –parent (is left child)— current (is left child) case.
                 if (isLeftChild(grandParentNode, current.parent) && isLeftChild(current.parent, current)) {
