@@ -1,12 +1,10 @@
-package com.company;
-
 /**
  * Represents a Red-Black Tree.
  * @author Dimitar Dimitrov and Viola Yasuda
  * @version 12/2/2021
  */
 public class RedBlackTree {
-    private RedBlackTree.Node root;
+    private Node root;
 
     /**
      * Represents a node in the red-black tree.
@@ -57,7 +55,7 @@ public class RedBlackTree {
      * @param n the node in question
      * @return true if the node is a leaf, false otherwise
      */
-    public boolean isLeaf(RedBlackTree.Node n){
+    public boolean isLeaf(Node n){
         if (n.equals(root) && n.leftChild == null && n.rightChild == null) return true;
         if (n.equals(root)) return false;
         if (n.leftChild == null && n.rightChild == null){
@@ -89,7 +87,7 @@ public class RedBlackTree {
      * Prints the tree in preorder.
      */
     public void printTree(){  //preorder: visit, go left, go right
-        RedBlackTree.Node currentNode = root;
+        Node currentNode = root;
         printTree(currentNode);
     }
 
@@ -97,7 +95,7 @@ public class RedBlackTree {
      * Prints the subtree under a node in preorder.
      * @param node the node that is at the root of the subtree to print
      */
-    public void printTree(RedBlackTree.Node node){
+    public void printTree(Node node){
         if (node == null){
             return;
         }
@@ -106,7 +104,7 @@ public class RedBlackTree {
         printTree(node.rightChild);
     }
 
-    public String getTree(RedBlackTree.Node node) {
+    public String getTree(Node node) {
         String tree = "{";
         if (node == null){
             return tree + "}";
