@@ -278,10 +278,23 @@ public class RedBlackTree {
                 //Solution: rotate the parent right and then continue recursively fixing the tree starting with the original parent.
 
                 //C) grandparent –parent (is left child)— current (is left child) case.
-                //Solution: make the parent black, make the grandparent red, rotate the grandparent to the right and quit, tree is balanced.
-
+                if (isLeftChild(grandParentNode, current.parent) && isLeftChild(current.parent, current)) {
+                    //Solution: make the parent black, make the grandparent red, rotate the grandparent to the right and quit, tree is balanced.
+                    current.parent.color = 1;
+                    current.parent.isRed = false;
+                    grandParentNode.color = 0;
+                    grandParentNode.isRed = true;
+                    rotateRight(grandParentNode);
+                }
                 //D) grandparent –parent (is right child)— current (is right child) case.
-                //Solution: make the parent black, make the grandparent red, rotate the grandparent to the left, quit tree is balanced.
+                else if (!isLeftChild(grandParentNode, current.parent) && !isLeftChild(current.parent, current)) {
+                    //Solution: make the parent black, make the grandparent red, rotate the grandparent to the left, quit tree is balanced.
+                    current.parent.color = 1;
+                    current.parent.isRed = false;
+                    grandParentNode.color = 0;
+                    grandParentNode.isRed = true;
+                    rotateLeft(grandParentNode);
+                }
             }
             // II. Else if the aunt is red,
             else {
