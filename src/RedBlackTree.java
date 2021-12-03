@@ -46,6 +46,10 @@ public class RedBlackTree {
             return this.leftChild == null && this.rightChild == null;
         }
 
+        /**
+         * Returns a string with the node's information (for debugging purposes).
+         * @return a string with the node's state
+         */
         @Override
         public String toString() {
             return "Node{" +
@@ -115,6 +119,7 @@ public class RedBlackTree {
      * @param data the data in the node to add to the tree
      */
     public void addNode(String data) {  	//this < that  <0.  this > that  >0
+        // TODO: check for correctness
         RedBlackTree.Node nodeToAdd = new RedBlackTree.Node(data);
         if (root == null) {
             root = nodeToAdd;
@@ -156,6 +161,7 @@ public class RedBlackTree {
      * @return the node with the string
      */
     public Node lookup(String k){
+        // TODO: check for correctness
         RedBlackTree.Node currentNode = root;
         while (!(currentNode == null || currentNode.key.equals(k))) {
             if (currentNode.key.compareTo(k) < 0) {
@@ -174,6 +180,7 @@ public class RedBlackTree {
      * @return the sibling of the node
      */
     public Node getSibling(Node n){
+        // TODO: check for correctness
         if (isLeftChild(n.parent, n)) {
             return n.parent.rightChild;
         }
@@ -188,6 +195,7 @@ public class RedBlackTree {
      * @return the aunt of the node
      */
     public Node getAunt(Node n){
+        // TODO: check for correctness
         return getSibling(n.parent);
     }
 
@@ -205,6 +213,7 @@ public class RedBlackTree {
      * @param n the node whose subtree will be rotated to the left
      */
     public void rotateLeft(Node n){
+        // TODO: check for correctness
         Node parent = n.parent;
         //     5  (n) t
         //       \
@@ -242,7 +251,7 @@ public class RedBlackTree {
      * @param n the node whose subtree will be rotated to the right
      */
     public void rotateRight(Node n){
-        //
+        // TODO: write method definition
     }
 
     /**
@@ -250,7 +259,7 @@ public class RedBlackTree {
      * @param current the node to start traversing at
      */
     public void fixTree(Node current) {
-        //
+        // TODO: write method definition
     }
 
     /**
