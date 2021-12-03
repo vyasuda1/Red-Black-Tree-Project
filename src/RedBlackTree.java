@@ -196,7 +196,36 @@ public class RedBlackTree {
      * @param n
      */
     public void rotateLeft(Node n){
-        //
+        Node parent = n.parent;
+        //     5  (n)
+        //       \
+        //         6 (rightChild)
+        //        /
+        //       7  (rLeftChild)
+        //right child node of the head
+        Node rightChild = n.rightChild;
+        //left node of the right child
+        Node rLeftChild = rightChild.leftChild;
+
+        //         6 (rightChild)
+        //        /
+        //       5  (n)
+        //set the right child's left node to the head (n)
+        rightChild.leftChild = n;
+
+        //     6  (rightChild)
+        //    / \
+        //  5     7  (rLeftChild)
+        //set the head's right child to the left child
+        rightChild.rightChild = rLeftChild;
+
+        //set the head to the right child
+        rightChild.parent = parent;
+
+        //if the rLeftChild is not null, set the parent to n
+        if(rLeftChild != null) {
+            rLeftChild.parent = rightChild;
+        }
     }
 
     /**
