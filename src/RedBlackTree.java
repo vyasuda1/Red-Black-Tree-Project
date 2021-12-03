@@ -259,7 +259,7 @@ public class RedBlackTree {
      * @param current the node to start traversing at
      */
     public void fixTree(Node current) {
-        // TODO: write method definition
+        // TODO: check for correctness
         //current is root node, make black and quit
         if(current.compareTo(root) == 0) {
             current.color = 1;
@@ -304,16 +304,13 @@ public class RedBlackTree {
             }
             // II. Else if the aunt is red,
             else {
-                // then make the parent black,
+                // then make the parent black, make the aunt black, make the grandparent red and continue recursively fix up the tree starting with the grandparent.
                 current.parent.color = 1;
                 current.parent.isRed = false;
-                // make the aunt black,
                 auntNode.color = 1;
                 auntNode.isRed = false;
-                // make the grandparent red
                 grandParentNode.color = 0;
                 grandParentNode.isRed = true;
-                // and continue recursively fix up the tree starting with the grandparent.
                 fixTree(grandParentNode);
             }
         }
