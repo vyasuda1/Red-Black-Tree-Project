@@ -20,7 +20,7 @@ public class RBTTester {
             Scanner in = new Scanner(file);
             startTime = System.currentTimeMillis();
             while (in.hasNextLine()) {
-                rbt.insert(in.nextLine().trim());
+                rbt.insert(in.nextLine());
             }
             endTime = System.currentTimeMillis();
             in.close();
@@ -34,8 +34,14 @@ public class RBTTester {
 
         //count the time for spell checking
         File poemFile = new File("poem.txt");
+        String[] expectedKeys = new String[]{"there", "once", "NOT FOUND", "NOT FOUND", "NOT FOUND", "from",
+                "NOT FOUND", "NOT FOUND", "kept", "NOT FOUND", "NOT FOUND", "cash", "NOT FOUND", "NOT FOUND", "bucket",
+                "NOT FOUND", "NOT FOUND", "daughter", "named", "NOT FOUND", "NOT FOUND", "away", "with", "NOT FOUND",
+                "NOT FOUND", "NOT FOUND", "NOT FOUND", "NOT FOUND", "NOT FOUND", "bucket", "NOT FOUND"};
+        String[] actualKeys = new String[expectedKeys.length];
         try {
             Scanner in = new Scanner(poemFile);
+            int i = 0;
             while(in.hasNext()) {
                 String word = in.next().toLowerCase().trim();
                 if (!word.substring(word.length() - 1, word.length()).matches("[a-zA-Z]+")) {
@@ -47,10 +53,16 @@ public class RBTTester {
                 duration = endTime - startTime;
                 System.out.print("Lookup time for \"" + word + "\": " + duration + " ms");
                 if (node == null) {
-                    System.out.print(" (NOT FOUND)");
+                    System.out.println(" (NOT FOUND)");
+                    actualKeys[i] = "NOT FOUND";
                 }
-                System.out.println();
+                else {
+                    System.out.println();
+                    actualKeys[i] = node.key;
+                }
+                i++;
             }
+            assertArrayEquals(expectedKeys, actualKeys);
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
