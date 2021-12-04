@@ -30,30 +30,31 @@ public class RBTTester {
         }
         duration = endTime - startTime;
 
-        System.out.println("Dictionary creation time: " + duration + " ms");
+        System.out.println("Dictionary creation time: " + duration + " ms\n");
 
         //count the time for spell checking
         File poemFile = new File("poem.txt");
         try {
             Scanner in = new Scanner(poemFile);
-            startTime = System.currentTimeMillis();
             while(in.hasNext()) {
                 String word = in.next().toLowerCase().trim();
                 if (!word.substring(word.length() - 1, word.length()).matches("[a-zA-Z]+")) {
                     word = word.substring(0, word.length() - 1);
                 }
+                startTime = System.currentTimeMillis();
                 RedBlackTree.Node node = rbt.lookup(word);
+                endTime = System.currentTimeMillis();
+                duration = endTime - startTime;
+                System.out.print("Lookup time for \"" + word + "\": " + duration + " ms");
                 if (node == null) {
-                    System.out.println("Word not found: " + word);
+                    System.out.print(" (NOT FOUND)");
                 }
+                System.out.println();
             }
-            endTime = System.currentTimeMillis();
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        duration = endTime - startTime;
-        System.out.println("Spell check time: " + duration + " ms");
     }
 
 	@Test
