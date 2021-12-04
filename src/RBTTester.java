@@ -62,7 +62,7 @@ public class RBTTester {
             int i = 0;
             while(in.hasNext()) {
                 String word = in.next().toLowerCase().trim();
-                if (!word.substring(word.length() - 1, word.length()).matches("[a-zA-Z]+")) {
+                if (!word.substring(word.length() - 1).matches("[a-zA-Z]+")) {
                     word = word.substring(0, word.length() - 1);
                 }
                 startTime = System.currentTimeMillis();
@@ -98,16 +98,16 @@ public class RBTTester {
         RedBlackTree.Node nodea = redBlackTree.lookup("a");
         assertEquals("1", node1.key);
         assertEquals("A", node1.parent.key);
-        assertEquals(null, node1.leftChild);
-        assertEquals(null, node1.rightChild);
-        assertEquals(true, node1.isRed);
+        assertNull(node1.leftChild);
+        assertNull(node1.rightChild);
+        assertTrue(node1.isRed);
         assertEquals(0, node1.color);
-        assertEquals("1", node1.key);
-        assertEquals("A", node1.parent.key);
-        assertEquals(null, node1.leftChild);
-        assertEquals(null, node1.rightChild);
-        assertEquals(true, node1.isRed);
-        assertEquals(0, node1.color);
+        assertEquals("a", nodea.key);
+        assertEquals("Z", nodea.parent.key);
+        assertNull(nodea.leftChild);
+        assertNull(nodea.rightChild);
+        assertTrue(nodea.isRed);
+        assertEquals(0, nodea.color);
     }
 
     /**
@@ -115,13 +115,6 @@ public class RBTTester {
      */
     @Test
     public void testLookup() {
-        /*
-        System.out.println(redBlackTree.lookup("A"));
-        System.out.println(redBlackTree.lookup("Z"));
-        System.out.println(redBlackTree.lookup("M"));
-        System.out.println(redBlackTree.lookup("F"));
-        System.out.println(redBlackTree.lookup("S"));
-         */
         RedBlackTree.Node mNode = redBlackTree.lookup("M");
         RedBlackTree.Node aNode = redBlackTree.lookup("A");
         RedBlackTree.Node sNode = redBlackTree.lookup("S");
@@ -129,21 +122,21 @@ public class RBTTester {
         assertEquals("", mNode.parent.key);
         assertEquals("A", mNode.leftChild.key);
         assertEquals("Z", mNode.rightChild.key);
-        assertEquals(false, mNode.isRed);
+        assertFalse(mNode.isRed);
         assertEquals(1, mNode.color);
 
         assertEquals("A", aNode.key);
         assertEquals("M", aNode.parent.key);
-        assertEquals(null, aNode.leftChild);
+        assertNull(aNode.leftChild);
         assertEquals("F", aNode.rightChild.key);
-        assertEquals(false, aNode.isRed);
+        assertFalse(aNode.isRed);
         assertEquals(1, aNode.color);
 
         assertEquals("S", sNode.key);
         assertEquals("Z", sNode.parent.key);
-        assertEquals(null, sNode.leftChild);
-        assertEquals( null, sNode.rightChild);
-        assertEquals(true, sNode.isRed);
+        assertNull(sNode.leftChild);
+        assertNull(sNode.rightChild);
+        assertTrue(sNode.isRed);
         assertEquals(0, sNode.color);
     }
 
@@ -158,8 +151,8 @@ public class RBTTester {
         RedBlackTree.Node siblingToS = redBlackTree.getSibling(redBlackTree.lookup("S"));
         assertEquals("Z", siblingToA.key);
         assertEquals("A", siblingToZ.key);
-        assertEquals(null, siblingToF);
-        assertEquals(null, siblingToS);
+        assertNull(siblingToF);
+        assertNull(siblingToS);
     }
 
     /**
@@ -172,24 +165,6 @@ public class RBTTester {
         assertEquals("Z", auntToF.key);
         assertEquals("A", auntToS.key);
     }
-
-    /**
-     * Tests the rotateLeft method of the RedBlackTree class.
-     */
-    @Test
-    public void testRotateLeft() {}
-
-    /**
-     * Tests the rotateRight method of the RedBlackTree class.
-     */
-    @Test
-    public void testRotateRight() {}
-
-    /**
-     * Tests the fixTree method of the RedBlackTree class.
-     */
-    @Test
-    public void testFixTree() {}
 
     /**
      * Tests the RedBlackTree class. Provided by Professor Potika.
@@ -208,16 +183,18 @@ public class RBTTester {
         rbt.insert("I");
         rbt.insert("J");
         assertEquals("DBACFEHGIJ", makeString(rbt));
-        String str=     "Color: 1, Key:D Parent: \n"+
-                        "Color: 1, Key:B Parent: D\n"+
-                        "Color: 1, Key:A Parent: B\n"+
-                        "Color: 1, Key:C Parent: B\n"+
-                        "Color: 1, Key:F Parent: D\n"+
-                        "Color: 1, Key:E Parent: F\n"+
-                        "Color: 0, Key:H Parent: F\n"+
-                        "Color: 1, Key:G Parent: H\n"+
-                        "Color: 1, Key:I Parent: H\n"+
-                        "Color: 0, Key:J Parent: I\n";
+        String str= """
+                Color: 1, Key:D Parent:\s
+                Color: 1, Key:B Parent: D
+                Color: 1, Key:A Parent: B
+                Color: 1, Key:C Parent: B
+                Color: 1, Key:F Parent: D
+                Color: 1, Key:E Parent: F
+                Color: 0, Key:H Parent: F
+                Color: 1, Key:G Parent: H
+                Color: 1, Key:I Parent: H
+                Color: 0, Key:J Parent: I
+                """;
 		assertEquals(str, makeStringDetails(rbt));
     }
 
@@ -233,8 +210,8 @@ public class RBTTester {
           {
              result = result + n.key;
           }
-       };
-       MyVisitor v = new MyVisitor();
+       }
+        MyVisitor v = new MyVisitor();
        t.preOrderVisit(v);
        return v.result;
     }
@@ -251,8 +228,8 @@ public class RBTTester {
 	            if(!(n.key).equals(""))
 	                result = result +"Color: "+n.color+", Key:"+n.key+" Parent: "+n.parent.key+"\n";
 	        }
-	    };
-	    MyVisitor v = new MyVisitor();
+	    }
+        MyVisitor v = new MyVisitor();
 	    t.preOrderVisit(v);
 	    return v.result;
     }
