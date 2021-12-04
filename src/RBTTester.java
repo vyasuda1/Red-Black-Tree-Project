@@ -92,7 +92,22 @@ public class RBTTester {
      */
     @Test
     public void testAddNode() {
-
+        redBlackTree.addNode("1");
+        redBlackTree.addNode("a");
+        RedBlackTree.Node node1 = redBlackTree.lookup("1");
+        RedBlackTree.Node nodea = redBlackTree.lookup("a");
+        assertEquals("1", node1.key);
+        assertEquals("A", node1.parent.key);
+        assertEquals(null, node1.leftChild);
+        assertEquals(null, node1.rightChild);
+        assertEquals(true, node1.isRed);
+        assertEquals(0, node1.color);
+        assertEquals("1", node1.key);
+        assertEquals("A", node1.parent.key);
+        assertEquals(null, node1.leftChild);
+        assertEquals(null, node1.rightChild);
+        assertEquals(true, node1.isRed);
+        assertEquals(0, node1.color);
     }
 
     /**
@@ -211,8 +226,7 @@ public class RBTTester {
      * @param t the red-black tree
      * @return a string with the keys in the tree
      */
-    public static String makeString(RedBlackTree t)
-    {
+    public static String makeString(RedBlackTree t) {
        class MyVisitor implements RedBlackTree.Visitor {
           String result = "";
           public void visit(RedBlackTree.Node n)
