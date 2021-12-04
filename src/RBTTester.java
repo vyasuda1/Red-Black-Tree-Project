@@ -3,8 +3,29 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 
 public class RBTTester {
+
+    @Test
+    public void testDictionary() {
+        RedBlackTree rbt = new RedBlackTree();
+        File file = new File("dictionary.txt");
+        try {
+            Scanner in = new Scanner(file);
+            while (in.hasNextLine()) {
+                rbt.insert(in.nextLine());
+            }
+            in.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 	@Test
     //Test the Red Black Tree

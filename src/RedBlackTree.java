@@ -23,9 +23,11 @@ public class RedBlackTree {
          */
         public Node(String data){
             this.key = data;
+            parent = null;
             leftChild = null;
             rightChild = null;
             isRed = true;
+            color = 0;
         }
 
         /**
@@ -53,7 +55,29 @@ public class RedBlackTree {
          */
         @Override
         public String toString() {
-            return key + " is Red: " + isRed;
+            String str = "Node{" + key + '\'' + ", parent=";
+            if (parent == null) {
+                str += "null";
+            }
+            else {
+                str += parent.key;
+            }
+            str += ", leftChild=";
+            if (leftChild == null) {
+                str += "null";
+            }
+            else {
+                str += leftChild.key;
+            }
+            str += ", rightChild=";
+            if (rightChild == null) {
+                str += "null";
+            }
+            else {
+                str += rightChild.key;
+            }
+            str += ", isRed=" + isRed + ", color=" + color + '}';
+            return str;
         }
     }
 
@@ -208,29 +232,25 @@ public class RedBlackTree {
      * @param n the node whose subtree will be rotated to the left
      */
     public void rotateLeft(Node n){
-        // TODO: check for correctness
-        Node originalParentOfN = n.parent;
-        Node y = n.rightChild;
-        Node originalLeftChildOfY = null;
-        if (y != null) {
-            originalLeftChildOfY = y.leftChild;
+        // TODO: write method definition
+        Node x = n, y = n.rightChild, p = x.parent;
+        Node beta = y.leftChild;
+        x.rightChild = beta;
+        if (beta != null) {
+            beta.parent = x;
         }
-        boolean nWasLeftChild = isLeftChild(originalParentOfN, n);
-        if (originalLeftChildOfY != null) {
-            originalLeftChildOfY.parent = n;
+        if (x.compareTo(root) == 0) {
+            root = y;
         }
-        n.rightChild = originalLeftChildOfY;
-        n.parent = y;
-        if (y != null) {
-            y.leftChild = n;
-            y.parent = originalParentOfN;
-        }
-        if (nWasLeftChild) {
-            originalParentOfN.leftChild = y;
+        else if (isLeftChild(p, x)) {
+            p.leftChild = y;
         }
         else {
-            originalParentOfN.rightChild = y;
+            p.rightChild = y;
         }
+        y.parent = p;
+        x.parent = y;
+        y.leftChild = x;
     }
 
     /**
@@ -239,26 +259,24 @@ public class RedBlackTree {
      */
     public void rotateRight(Node n){
         // TODO: write method definition
-        Node originalParentOfN = n.parent;
-        Node x = n.leftChild;
-        Node originalRightChildOfX = null;
-        if (x != null) {
-            originalRightChildOfX = x.rightChild;
+        Node y = n, x = y.leftChild, p = y.parent;
+        Node beta = x.rightChild;
+        y.leftChild = beta;
+        if (beta != null) {
+            beta.parent = y;
         }
-        boolean nWasLeftChild = isLeftChild(originalParentOfN, n);
-        if (originalRightChildOfX != null) {
-            originalRightChildOfX.parent = n;
+        if (y.compareTo(root) == 0) {
+            root = x;
         }
-        n.leftChild = originalRightChildOfX;
-        n.parent = x;
-        x.rightChild = n;
-        x.parent = originalParentOfN;
-        if (nWasLeftChild) {
-            originalParentOfN.leftChild = x;
+        else if (!isLeftChild(p, y)) {
+            p.rightChild = x;
         }
         else {
-            originalParentOfN.rightChild = x;
+            p.leftChild = x;
         }
+        x.parent = p;
+        y.parent = x;
+        x.rightChild = y;
     }
 
     /**
