@@ -9,7 +9,7 @@ public class RedBlackTree {
     /**
      * Represents a node in the red-black tree.
      */
-    public class Node {
+    public static class Node {
         String key;
         Node parent;
         Node leftChild;
@@ -37,16 +37,6 @@ public class RedBlackTree {
          */
         public int compareTo(Node n){ 	//this < that  <0
             return key.compareTo(n.key);  	//this > that  >0
-        }
-
-        /**
-         * Determines if the node is a leaf.
-         * @return true if the node is a leaf, false otherwise
-         */
-        public boolean isLeaf(){
-            if (this.equals(root) && this.leftChild == null && this.rightChild == null) return true;
-            if (this.equals(root)) return false;
-            return this.leftChild == null && this.rightChild == null;
         }
 
         /**
@@ -82,17 +72,6 @@ public class RedBlackTree {
     }
 
     /**
-     * Determines if a node in the tree is a leaf.
-     * @param n the node in question
-     * @return true if the node is a leaf, false otherwise
-     */
-    public boolean isLeaf(Node n){
-        if (n.equals(root) && n.leftChild == null && n.rightChild == null) return true;
-        if (n.equals(root)) return false;
-        return n.leftChild == null && n.rightChild == null;
-    }
-
-    /**
      * Represents a visitor tat will visit each node in the tree.
      */
     public interface Visitor{
@@ -101,35 +80,6 @@ public class RedBlackTree {
          * @param n the visited node
          */
         void visit(Node n);
-    }
-
-    /**
-     * Visits a node.
-     * @param n the node to visit
-     */
-    public void visit(Node n){
-        System.out.println(n.key);
-    }
-
-    /**
-     * Prints the tree in preorder.
-     */
-    public void printTree(){  //preorder: visit, go left, go right
-        Node currentNode = root;
-        printTree(currentNode);
-    }
-
-    /**
-     * Prints the subtree under a node in preorder.
-     * @param node the node that is at the root of the subtree to print
-     */
-    public void printTree(Node node){
-        System.out.print(node.key);
-        if (node.isLeaf()){
-            return;
-        }
-        printTree(node.leftChild);
-        printTree(node.rightChild);
     }
 
     /**
@@ -232,25 +182,24 @@ public class RedBlackTree {
      * @param n the node whose subtree will be rotated to the left
      */
     public void rotateLeft(Node n){
-        // TODO: write method definition
-        Node x = n, y = n.rightChild, p = x.parent;
-        Node beta = y.leftChild;
-        x.rightChild = beta;
-        if (beta != null) {
-            beta.parent = x;
+        // TODO: check for correctness
+        Node origNRightChild = n.rightChild, origNParent = n.parent, origNGrandChild = origNRightChild.leftChild;
+        n.rightChild = origNGrandChild;
+        if (origNGrandChild != null) {
+            origNGrandChild.parent = n;
         }
-        if (x.compareTo(root) == 0) {
-            root = y;
+        if (n.compareTo(root) == 0) {
+            root = origNRightChild;
         }
-        else if (isLeftChild(p, x)) {
-            p.leftChild = y;
+        else if (isLeftChild(origNParent, n)) {
+            origNParent.leftChild = origNRightChild;
         }
         else {
-            p.rightChild = y;
+            origNParent.rightChild = origNRightChild;
         }
-        y.parent = p;
-        x.parent = y;
-        y.leftChild = x;
+        origNRightChild.parent = origNParent;
+        n.parent = origNRightChild;
+        origNRightChild.leftChild = n;
     }
 
     /**
@@ -258,25 +207,24 @@ public class RedBlackTree {
      * @param n the node whose subtree will be rotated to the right
      */
     public void rotateRight(Node n){
-        // TODO: write method definition
-        Node y = n, x = y.leftChild, p = y.parent;
-        Node beta = x.rightChild;
-        y.leftChild = beta;
-        if (beta != null) {
-            beta.parent = y;
+        // TODO: check for correctness
+        Node origNLeftChild = n.leftChild, origNParent = n.parent, origNGrandChild = origNLeftChild.rightChild;
+        n.leftChild = origNGrandChild ;
+        if (origNGrandChild  != null) {
+            origNGrandChild .parent = n;
         }
-        if (y.compareTo(root) == 0) {
-            root = x;
+        if (n.compareTo(root) == 0) {
+            root = origNLeftChild;
         }
-        else if (!isLeftChild(p, y)) {
-            p.rightChild = x;
+        else if (!isLeftChild(origNParent, n)) {
+            origNParent.rightChild = origNLeftChild;
         }
         else {
-            p.leftChild = x;
+            origNParent.leftChild = origNLeftChild;
         }
-        x.parent = p;
-        y.parent = x;
-        x.rightChild = y;
+        origNLeftChild.parent = origNParent;
+        n.parent = origNLeftChild;
+        origNLeftChild.rightChild = n;
     }
 
     /**
@@ -293,35 +241,36 @@ public class RedBlackTree {
         //if the current node is red and parent node is red, unbalanced tree
         else if(current.isRed && current.parent.isRed) {
             // If the aunt node is empty or black, then there are four sub cases that you have to process.
+            Node parentNode = current.parent;
             Node auntNode = getAunt(current);
             Node grandParentNode = getGrandparent(current);
             if (auntNode == null || !auntNode.isRed) {
                 //A) grandparent –parent(is left child)— current (is right child) case.
                 //Solution: rotate the parent left and then continue recursively fixing the tree starting with the original parent.
-                if(isLeftChild(grandParentNode, current.parent) && !isLeftChild(current.parent, current)) {
-                    rotateLeft(current.parent);
-                    fixTree(current.parent);
+                if(isLeftChild(grandParentNode, parentNode) && !isLeftChild(parentNode, current)) {
+                    rotateLeft(parentNode);
+                    fixTree(parentNode);
                 }
                 //B) grandparent –parent (is right child)— current (is left child) case.
                 //Solution: rotate the parent right and then continue recursively fixing the tree starting with the original parent.
-                else if(!isLeftChild(grandParentNode, current.parent) && isLeftChild(current.parent, current)) {
-                    rotateRight(current.parent);
-                    fixTree(current.parent);
+                else if(!isLeftChild(grandParentNode, parentNode) && isLeftChild(parentNode, current)) {
+                    rotateRight(parentNode);
+                    fixTree(parentNode);
                 }
                 //C) grandparent –parent (is left child)— current (is left child) case.
-                else if (isLeftChild(grandParentNode, current.parent) && isLeftChild(current.parent, current)) {
+                else if (isLeftChild(grandParentNode, parentNode) && isLeftChild(parentNode, current)) {
                     //Solution: make the parent black, make the grandparent red, rotate the grandparent to the right and quit, tree is balanced.
-                    current.parent.color = 1;
-                    current.parent.isRed = false;
+                    parentNode.color = 1;
+                    parentNode.isRed = false;
                     grandParentNode.color = 0;
                     grandParentNode.isRed = true;
                     rotateRight(grandParentNode);
                 }
                 //D) grandparent –parent (is right child)— current (is right child) case.
-                else if (!isLeftChild(grandParentNode, current.parent) && !isLeftChild(current.parent, current)) {
+                else if (!isLeftChild(grandParentNode, parentNode) && !isLeftChild(parentNode, current)) {
                     //Solution: make the parent black, make the grandparent red, rotate the grandparent to the left, quit tree is balanced.
-                    current.parent.color = 1;
-                    current.parent.isRed = false;
+                    parentNode.color = 1;
+                    parentNode.isRed = false;
                     grandParentNode.color = 0;
                     grandParentNode.isRed = true;
                     rotateLeft(grandParentNode);
@@ -330,8 +279,8 @@ public class RedBlackTree {
             // II. Else if the aunt is red,
             else {
                 // then make the parent black, make the aunt black, make the grandparent red and continue recursively fix up the tree starting with the grandparent.
-                current.parent.color = 1;
-                current.parent.isRed = false;
+                parentNode.color = 1;
+                parentNode.isRed = false;
                 auntNode.color = 1;
                 auntNode.isRed = false;
                 grandParentNode.color = 0;
@@ -339,15 +288,6 @@ public class RedBlackTree {
                 fixTree(grandParentNode);
             }
         }
-    }
-
-    /**
-     * Determines if a node is empty.
-     * @param n the node in question.
-     * @return true if the node does not contain a key, false otherwise.
-     */
-    public boolean isEmpty(Node n){
-        return n.key == null;
     }
 
     /**
