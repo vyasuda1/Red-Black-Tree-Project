@@ -187,7 +187,7 @@ public class RedBlackTree {
                 currentNode = currentNode.rightChild;
             }
             else if (currentNode.key.compareTo(k) > 0) {
-                currentNode = currentNode.rightChild;
+                currentNode = currentNode.leftChild;
             }
         }
         return currentNode;

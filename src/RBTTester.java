@@ -12,19 +12,45 @@ public class RBTTester {
 
     @Test
     public void testDictionary() {
+        //count the time to create the dictionary
+        long startTime = 0, endTime = 0, duration;
         RedBlackTree rbt = new RedBlackTree();
         File file = new File("dictionary.txt");
         try {
             Scanner in = new Scanner(file);
+            startTime = System.currentTimeMillis();
             while (in.hasNextLine()) {
-                rbt.insert(in.nextLine());
+                rbt.insert(in.nextLine().trim());
             }
+            endTime = System.currentTimeMillis();
             in.close();
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        duration = endTime - startTime;
 
+        System.out.println("Dictionary creation time: " + duration + " ms");
+
+        //count the time for spell checking
+        File poemFile = new File("poem.txt");
+        try {
+            Scanner in = new Scanner(poemFile);
+            startTime = System.currentTimeMillis();
+            while(in.hasNext()) {
+                String word = in.next().toLowerCase().trim();
+                RedBlackTree.Node node = rbt.lookup(word);
+                if (node == null) {
+                    System.out.println("Word not found: " + word);
+                }
+            }
+            endTime = System.currentTimeMillis();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        duration = endTime - startTime;
+        System.out.println("Spell check time: " + duration + " ms");
     }
 
 	@Test
