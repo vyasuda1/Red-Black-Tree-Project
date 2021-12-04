@@ -39,6 +39,9 @@ public class RBTTester {
             startTime = System.currentTimeMillis();
             while(in.hasNext()) {
                 String word = in.next().toLowerCase().trim();
+                if (!word.substring(word.length() - 1, word.length()).matches("[a-zA-Z]+")) {
+                    word = word.substring(0, word.length() - 1);
+                }
                 RedBlackTree.Node node = rbt.lookup(word);
                 if (node == null) {
                     System.out.println("Word not found: " + word);
